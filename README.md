@@ -55,38 +55,38 @@ cloudless-aws-simulation/
 
 ---
 
-````mermaid
+```mermaid
 flowchart TD
-  subgraph S3["🪣 input/ (Simulated S3 Bucket)"]
-    FileUpload["📤 New File"]
+  subgraph S3["input/ (Simulated S3 Bucket)"]
+    FileUpload["New File"]
   end
 
-  subgraph Watcher["📡 watcher.sh (inotifywait loop)"]
+  subgraph Watcher["watcher.sh (inotifywait loop)"]
     DetectFile["Detect file event"]
     TriggerLambda["Trigger lambda.sh"]
   end
 
-  subgraph Lambda["⚙️ lambda.sh (Simulated Lambda)"]
+  subgraph Lambda["lambda.sh (Simulated Lambda)"]
     ProcessFile["Process file"]
     LogToDisk["Log to logs/"]
     StoreInDB["Insert metadata into db.sqlite (events)"]
     EnqueueMsg["Call sqs-send.sh"]
   end
 
-  subgraph DB["🗃️ db.sqlite"]
+  subgraph DB["db.sqlite"]
     EventsTable["Table: events"]
     QueueTable["Table: queue"]
   end
 
-  subgraph Archive["📦 archive/"]
+  subgraph Archive["archive/"]
     ArchiveFile["Store versioned copy"]
   end
 
-  subgraph S3Sync["🔁 s3sync.sh"]
-    MoveFiles["Move & log to archive/"]
+  subgraph S3Sync["s3sync.sh"]
+    MoveFiles["Move and log to archive/"]
   end
 
-  subgraph Queue["📨 sqs-send.sh / sqs-receive.sh"]
+  subgraph Queue["sqs-send.sh / sqs-receive.sh"]
     Enqueue["Enqueue message"]
     Receive["Dequeue message"]
     MarkConsumed["Mark as consumed"]
@@ -111,6 +111,7 @@ flowchart TD
   MoveFiles --> Archive
 
   StoreInDB --> EventsTable
+
 ```
 
 
