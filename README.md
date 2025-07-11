@@ -55,6 +55,67 @@ cloudless-aws-simulation/
 
 ---
 
+````mermaid
+flowchart TD
+  subgraph S3["🪣 input/ (Simulated S3 Bucket)"]
+    FileUpload["📤 New File"]
+  end
+
+  subgraph Watcher["📡 watcher.sh (inotifywait loop)"]
+    DetectFile["Detect file event"]
+    TriggerLambda["Trigger lambda.sh"]
+  end
+
+  subgraph Lambda["⚙️ lambda.sh (Simulated Lambda)"]
+    ProcessFile["Process file"]
+    LogToDisk["Log to logs/"]
+    StoreInDB["Insert metadata into db.sqlite (events)"]
+    EnqueueMsg["Call sqs-send.sh"]
+  end
+
+  subgraph DB["🗃️ db.sqlite"]
+    EventsTable["Table: events"]
+    QueueTable["Table: queue"]
+  end
+
+  subgraph Archive["📦 archive/"]
+    ArchiveFile["Store versioned copy"]
+  end
+
+  subgraph S3Sync["🔁 s3sync.sh"]
+    MoveFiles["Move & log to archive/"]
+  end
+
+  subgraph Queue["📨 sqs-send.sh / sqs-receive.sh"]
+    Enqueue["Enqueue message"]
+    Receive["Dequeue message"]
+    MarkConsumed["Mark as consumed"]
+  end
+
+  FileUpload --> DetectFile
+  DetectFile --> TriggerLambda
+  TriggerLambda --> ProcessFile
+  ProcessFile --> LogToDisk
+  ProcessFile --> StoreInDB
+  ProcessFile --> EnqueueMsg
+  EnqueueMsg --> Enqueue
+  Enqueue --> QueueTable
+  Receive --> QueueTable
+  Receive --> MarkConsumed
+  MarkConsumed --> QueueTable
+
+  ProcessFile --> ArchiveFile
+  ArchiveFile --> Archive
+
+  S3Sync --> MoveFiles
+  MoveFiles --> Archive
+
+  StoreInDB --> EventsTable
+```
+
+
+
+
 ## 🎯 Training Goals
 
 1. **Understand Cloud Abstractions** by reproducing them from scratch.
