@@ -33,3 +33,10 @@ run:
 clean:
 	@rm -rf input/* logs/* db.sqlite
 	@echo "[WARNING] Project files removed."
+
+## Sync processed files to archive/ (S3 Simulation)
+sync:
+	@echo "[MAKE] Starting sync: input/ -> archive/"
+	@bash s3sync.sh
+	@echo "[DONE] All eligible files have been archived."
+
