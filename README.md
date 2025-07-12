@@ -90,7 +90,7 @@ sudo apt install -y bash sqlite3 coreutils inotify-tools
 
 ---
 
-![terminal]('_resources/Peek 2025-07-12 00-08.gif')
+![terminal](https://github.com/mikeninerbravog/cloudless-aws-simulation/blob/master/_resources/Peek%202025-07-12%2000-08.gif)
 
 ---
 
