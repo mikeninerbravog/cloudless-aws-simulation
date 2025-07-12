@@ -1,13 +1,16 @@
-# 🛠️ AWS-like Systems Simulation — Bare Metal DevOps Training
+# AWS-like Systems Simulation — Bare Metal DevOps Training
 
 **Project Codename:** `cloudless-aws-simulation`
+
 **Instructor:** Mike Niner Bravog
+
 **Objective:** Simulate core AWS primitives using only shell scripts, SQLite, and native Linux tooling.
+
 **Environment:** Custom VPS at `bravog.com` — no cloud dependencies.
 
 ---
 
-## 🧭 Purpose
+## Purpose
 
 This Proof of Concept (POC) is designed as a **DevOps training simulation**, where engineers will learn to reproduce the functionality of key AWS services — without using AWS.
 
@@ -23,7 +26,7 @@ By building everything from scratch, the team will gain real-world expertise in:
 
 ---
 
-## 🔧 What We Simulate from AWS
+## What We Simulate from AWS
 
 | AWS Service         | Simulated Behavior                         | Tools Used                            |
 | ------------------- | ------------------------------------------ | ------------------------------------- |
@@ -36,7 +39,7 @@ This POC simulates **event-driven pipelines** where files dropped into a storage
 
 ---
 
-## 🗂️ Project Layout
+## Project Layout
 
 ```
 cloudless-aws-simulation/
@@ -114,10 +117,7 @@ flowchart TD
 
 ```
 
-
-
-
-## 🎯 Training Goals
+## Training Goals
 
 1. **Understand Cloud Abstractions** by reproducing them from scratch.
 2. **Master File-based Event Triggers** using native Linux tools.
@@ -128,7 +128,7 @@ flowchart TD
 
 ---
 
-## 🧪 Example Use Case (Scenario)
+## Example Use Case (Scenario)
 
 1. DevOps engineer uploads a new file into `input/`.
 2. `watcher.sh` (running with `inotifywait`) detects the file.
@@ -158,14 +158,18 @@ Everything runs in a **self-contained VPS environment**, without relying on any 
 
 ---
 
-## 👨‍🏫 Notes for Trainees
+## Notes for Trainees
 
 * All logic is modular. Each script can be tested individually.
+* 
 * Logs are timestamped. Failures are fatal — fail fast, fail loud.
+* 
 * You are expected to **extend** this POC with additional simulations (e.g., `SNS`, `IAM`, `API Gateway`).
+* 
 * You're not copying the cloud. You're **reclaiming your infrastructure**.
 
 ---
 
 **Built under pressure, in steel, for the field.**
+
 By Mike Niner Bravog
