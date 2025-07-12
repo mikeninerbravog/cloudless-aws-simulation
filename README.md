@@ -198,6 +198,14 @@ It runs fully self-contained in any Linux VPS — including air-gapped networks.
 
 ---
 
+This POC is actively being expanded to simulate additional AWS services, including **SNS (Simple Notification Service)** for fanout messaging, **IAM** for access control via role-based shell scripts, and a minimal **API Gateway** using `ncat`, `socat`, or lightweight HTTP daemons to receive external uploads or trigger functions. 
+
+These modules will follow the same design philosophy: minimal, modular, observable, and fully testable via CLI. Unlike AWS, where these services can introduce **complex billing layers and unexpected cost spikes**, this simulation runs with **near-zero operating cost** — limited only to disk, CPU, and memory usage on your own VPS. 
+
+The result is a **realistic DevOps environment** that mirrors production-grade patterns **without paying for the cloud**.
+
+---
+
 **You're not mimicking the cloud. You're reclaiming your stack.**
 — *Built under pressure, in steel, for the field.*
 
