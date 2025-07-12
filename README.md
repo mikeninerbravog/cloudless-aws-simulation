@@ -324,7 +324,7 @@ Perfect for air-gapped environments, cost-free labs, or DevSecOps drills.
 
 | Feature        | Purpose                | Module        |
 | -------------- | ---------------------- | ------------- |
-| SNS (done)     | Fan-out pub/sub        | `sns/*.sh`    |
+| SNS     | Fan-out pub/sub        | `sns/*.sh`    |
 | IAM            | Access control         | `iam-auth.sh` |
 | API Gateway    | File upload via HTTP   | `gateway.sh`  |
 | Step Functions | State machine chaining | `step.sh`     |
