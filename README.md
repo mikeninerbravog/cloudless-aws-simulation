@@ -1,62 +1,109 @@
 # AWS-like Systems Simulation — Bare Metal DevOps Training
 
-**Project Codename:** `cloudless-aws-simulation`
-
-**Instructor:** Mike Niner Bravog
-
-**Objective:** Simulate core AWS primitives using only shell scripts, SQLite, and native Linux tooling.
-
-**Environment:** Custom VPS at `bravog.com` — no cloud dependencies.
+**Codename:** `cloudless-aws-simulation`  
+**Instructor:** Mike Niner Bravog  
+**Goal:** Simulate essential AWS primitives using Bash, SQLite, and native Linux tooling.  
+**Environment:** Standalone VPS on `bravog.com` — 100% cloudless.
 
 ---
 
 ## Purpose
 
-This Proof of Concept (POC) is designed as a **DevOps training simulation**, where engineers will learn to reproduce the functionality of key AWS services — without using AWS.
+This Proof of Concept (POC) serves as a DevOps training lab to help engineers **rebuild AWS behaviors from scratch**, without AWS, containers, SDKs, or vendor lock-in.
 
-By building everything from scratch, the team will gain real-world expertise in:
+Through minimal, testable shell modules, this simulation teaches:
 
-* System orchestration using `bash` and `make`
-* Event-driven execution using `inotify`
-* Object storage workflows (like S3) using native tools
-* Key-Value storage (like DynamoDB) using SQLite
-* Stateless compute (like Lambda) using shell functions
-* Message queuing and dispatching using SQLite + Bash (SQS simulation)
-* Logging, versioning, and minimal observability
+- File-based orchestration with `bash` and `make`
+- Real-time event triggers using `inotify`
+- Object storage logic (S3) via filesystem and archiving
+- Stateless compute (Lambda) via modular shell functions
+- Key-value storage (DynamoDB) with SQLite
+- Queue-based messaging (SQS) with a local DB
+- Logging, versioning, and operational traceability
 
 ---
 
-## What We Simulate from AWS
+## Simulated AWS Services
 
 | AWS Service         | Simulated Behavior                         | Tools Used                            |
-| ------------------- | ------------------------------------------ | ------------------------------------- |
-| **Amazon S3**       | Object storage (upload, versioning, sync)  | `cp`, `rsync`, file timestamps        |
-| **AWS Lambda**      | Trigger function on event (new file)       | `inotifywait`, `bash`, `cron`, `trap` |
-| **Amazon DynamoDB** | Lightweight key-value database             | `sqlite3`, `bash`, `JSON`             |
-| **Amazon SQS**      | Message queue with enqueue/dequeue pattern | `sqlite3`, `bash`, `stdin/stdout`     |
-
-This POC simulates **event-driven pipelines** where files dropped into a storage bucket (`input/`) trigger compute logic (`lambda.sh`), which in turn logs the operation, stores metadata in a lightweight database, and can enqueue messages for further processing.
+|---------------------|--------------------------------------------|----------------------------------------|
+| **Amazon S3**       | File storage, versioning, sync             | `cp`, `rsync`, `sha256sum`             |
+| **AWS Lambda**      | Triggered execution on file event          | `inotifywait`, `bash`                  |
+| **Amazon DynamoDB** | Lightweight key-value storage              | `sqlite3`, `bash`, JSON                |
+| **Amazon SQS**      | Message queue (send/receive model)         | `sqlite3`, `bash`, `stdin/stdout`      |
 
 ---
 
 ## Project Layout
 
 ```
+
 cloudless-aws-simulation/
-├── input/                  # Simulated S3 bucket (monitored directory)
-├── logs/                   # Lambda execution logs
-├── db.sqlite               # Simulated DynamoDB + SQS metadata
-├── archive/                # Archived files after sync
-├── watcher.sh              # inotifywait loop triggering lambda
-├── lambda.sh               # Simulated AWS Lambda function (bash)
-├── s3sync.sh               # Sync and archive script (S3 behavior)
-├── sqs-send.sh             # Simulated enqueue (SQS send message)
-├── sqs-receive.sh          # Simulated dequeue (SQS receive message)
-├── Makefile                # Controlled execution and setup
-└── README.md               # This file
-```
+├── input/            # Monitored directory (S3 simulation)
+├── archive/          # Versioned storage after sync
+├── logs/             # Lambda and sync logs
+├── db.sqlite         # SQLite store (DynamoDB + SQS)
+├── lambda.sh         # Stateless compute unit
+├── watcher.sh        # File monitor and trigger
+├── s3sync.sh         # Archive and move processed files
+├── sqs-send.sh       # Simulated message enqueue
+├── sqs-receive.sh    # Simulated message dequeue
+├── Makefile          # Orchestration via CLI
+└── README.md         # You're here
+
+````
 
 ---
+
+## Requirements
+
+Install these system tools (Debian-based distros):
+
+```bash
+sudo apt update
+sudo apt install -y bash sqlite3 coreutils inotify-tools
+````
+
+**Key components:**
+
+* `bash`: POSIX scripting engine
+* `sqlite3`: Embedded database
+* `coreutils`: File operations (mv, cp, sha256sum, etc.)
+* `inotify-tools`: Real-time file system monitor (`inotifywait`)
+
+> `inotifywait` acts as a sentinel. It listens for filesystem changes and reacts instantly — no polling, no wasted CPU, no external agents.
+
+---
+
+## Workflow Overview
+
+1. A file is placed in `input/` (via `scp`, `curl`, etc).
+2. `watcher.sh` detects the event using `inotifywait`.
+3. `lambda.sh` is triggered:
+
+   * Computes SHA256
+   * Logs to `logs/`
+   * Inserts metadata into `db.sqlite`
+   * Sends a message to the local queue via `sqs-send.sh`
+4. A consumer can run `sqs-receive.sh` to process messages.
+5. Running `make sync` or `bash s3sync.sh` moves the file to `archive/`.
+
+---
+
+## Real-World Use Cases
+
+| Problem                           | Simulated Solution                        |
+| --------------------------------- | ----------------------------------------- |
+| Process incoming client documents | File drop → trigger → log + index         |
+| Act on sensor or ETL file drops   | Event-driven via inotify                  |
+| Immutable audit logging           | SHA256 + timestamp + log + archive        |
+| Archiving + version control       | `archive/` naming with content hash       |
+| Asynchronous event pipeline       | SQLite queue + consumer script            |
+| Offline-ready DevOps system       | Runs on any VPS, no external dependencies |
+
+---
+
+## Mermaid Diagram
 
 ```mermaid
 flowchart TD
@@ -114,59 +161,40 @@ flowchart TD
   MoveFiles --> Archive
 
   StoreInDB --> EventsTable
-
 ```
+
+---
 
 ## Training Goals
 
-1. **Understand Cloud Abstractions** by reproducing them from scratch.
-2. **Master File-based Event Triggers** using native Linux tools.
-3. **Simulate Serverless Execution** with clear logs and stateless behavior.
-4. **Implement Key-Value Storage** using SQLite, not managed cloud databases.
-5. **Develop CI/CD-Compatible Pipelines** entirely offline.
-6. **Build Queue-based Messaging Systems** using local tools (SQS style)
+1. Understand cloud primitives by building them from scratch.
+2. Use Linux-native tools for real-time orchestration.
+3. Simulate stateless compute (Lambda) behavior locally.
+4. Store structured metadata using local key-value DBs.
+5. Build queue-based systems offline (SQS-style).
+6. Package workflows using Makefiles and shell modules.
 
 ---
 
-## Example Use Case (Scenario)
+## No External Dependencies
 
-1. DevOps engineer uploads a new file into `input/`.
-2. `watcher.sh` (running with `inotifywait`) detects the file.
-3. It invokes `lambda.sh`, passing the filename as input.
-4. `lambda.sh`:
-
-   * Logs the event to `logs/`
-   * Hashes and stores metadata into `db.sqlite`
-   * Optionally moves the file to a new location using `s3sync.sh`
-   * Can enqueue a message into the SQLite-based queue (`sqs-send.sh`)
-5. A separate consumer process (`sqs-receive.sh`) pulls and processes messages.
-6. Results are traceable, testable, and observable from CLI.
+This system requires no cloud APIs, SDKs, credentials, containers, or runtimes.
+It runs fully self-contained in any Linux VPS — including air-gapped networks.
 
 ---
 
-## 🛡️ No External Dependencies
+## Next Steps (Optional Extensions)
 
-This POC uses:
-
-* `bash`
-* `sqlite3`
-* `coreutils` (cp, mv, sha256sum, etc.)
-* `inotify-tools`
-* `make` (optional for orchestration)
-
-Everything runs in a **self-contained VPS environment**, without relying on any external API, vendor, or cloud service.
+| Feature        | Purpose                     | Future Module         |
+| -------------- | --------------------------- | --------------------- |
+| SNS Fanout     | Notify multiple consumers   | `sns-publish.sh`      |
+| IAM ACL        | Simulated access control    | `iam-auth.sh`         |
+| API Gateway    | File upload via HTTP        | `gateway.sh` + `ncat` |
+| Step Functions | State machines and chaining | `step.sh`             |
 
 ---
 
-## Notes for Trainees
-
-* All logic is modular. Each script can be tested individually.
-* Logs are timestamped. Failures are fatal — fail fast, fail loud.
-* You are expected to **extend** this POC with additional simulations (e.g., `SNS`, `IAM`, `API Gateway`).
-* You're not copying the cloud. You're **reclaiming your infrastructure**.
-
----
-
-**Built under pressure, in steel, for the field.**
+**You're not mimicking the cloud. You're reclaiming your stack.**
+— *Built under pressure, in steel, for the field.*
 
 By Mike Niner Bravog
