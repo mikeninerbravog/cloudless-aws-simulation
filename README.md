@@ -35,7 +35,9 @@ Through minimal, testable shell modules, this simulation teaches:
 | **Amazon SNS**      | Fan-out notifications to subscribers | `bash`, file-based subscription model |
 
 ---
+
 ![terminal](https://github.com/mikeninerbravog/cloudless-aws-simulation/blob/master/_resources/Peek%202025-07-12%2000-08.gif)
+
 ---
 
 ## Project Layout
