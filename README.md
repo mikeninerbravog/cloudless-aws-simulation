@@ -1,8 +1,11 @@
 # AWS-like Systems Simulation — Bare Metal DevOps Training
 
 **Codename:** `cloudless-aws-simulation`
+
 **Instructor:** Mike Niner Bravog
+
 **Goal:** Simulate essential AWS primitives using Bash, SQLite, and native Linux tooling.
+
 **Environment:** Standalone VPS on `bravog.com` — 100% cloudless.
 
 ---
