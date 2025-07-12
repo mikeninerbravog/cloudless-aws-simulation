@@ -90,6 +90,10 @@ sudo apt install -y bash sqlite3 coreutils inotify-tools
 
 ---
 
+![terminal]('_resources/Peek 2025-07-12 00-08.gif')
+
+---
+
 ## Real-World Use Cases
 
 | Problem                           | Simulated Solution                        |
