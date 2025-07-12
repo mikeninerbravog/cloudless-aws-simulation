@@ -161,11 +161,8 @@ Everything runs in a **self-contained VPS environment**, without relying on any 
 ## Notes for Trainees
 
 * All logic is modular. Each script can be tested individually.
-* 
 * Logs are timestamped. Failures are fatal — fail fast, fail loud.
-* 
 * You are expected to **extend** this POC with additional simulations (e.g., `SNS`, `IAM`, `API Gateway`).
-* 
 * You're not copying the cloud. You're **reclaiming your infrastructure**.
 
 ---
