@@ -39,7 +39,7 @@ Through minimal, testable shell modules, this simulation teaches:
 
 ---
 
-![terminal](https://github.com/mikeninerbravog/cloudless-aws-simulation/blob/master/_resources/Peek%202025-07-12%2000-08.gif)
+![terminal](https://github.com/mikeninerbravog/cloudless-aws-simulation/blob/master/_resources/Peek%202025-07-12%2010-36.gif)
 
 ---
 
