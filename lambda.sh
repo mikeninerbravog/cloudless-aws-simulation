@@ -37,3 +37,13 @@ VALUES ('$BASENAME', '$HASH', '$TIMESTAMP');
 EOF
 
 echo "[OK] Lambda processed $BASENAME (hash: $HASH)"
+
+# Optional SNS publish (topic: s3new)
+if [[ -x sns/sns-publish.sh ]]; then
+    bash sns/sns-publish.sh s3new "New file processed: $BASENAME"
+fi
+
+# Optional S3 Sync (archive move)
+if [[ -x s3sync.sh ]]; then
+    bash s3sync.sh
+fi
