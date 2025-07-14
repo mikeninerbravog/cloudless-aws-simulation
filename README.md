@@ -1,356 +1,323 @@
-# AWS-like Systems Simulation — Bare Metal DevOps Training
+# 🛠️ Cloudless AWS Simulation
 
+**Bare Metal DevOps Training Lab**
 **Codename:** `cloudless-aws-simulation`
+**Author & Instructor:** *Mike Niner Bravog*
 
-**Instructor:** Mike Niner Bravog
-
-**Goal:** Simulate essential AWS primitives using Bash, SQLite, and native Linux tooling.
-
-**Environment:** Standalone VPS on `bravog.com` — 100% cloudless.
+> “You're not mimicking the cloud. You're reclaiming your stack.”
+> *Built under pressure, in steel, for the field.*
 
 ---
 
-## Purpose
+## 🔍 Overview
 
-This Proof of Concept (POC) serves as a DevOps training lab to help engineers **rebuild AWS behaviors from scratch**, without AWS, containers, SDKs, or vendor lock-in.
+This project is a **cloudless simulation of AWS core services**, handcrafted entirely with Bash, SQLite, and native Linux tools — no SDKs, no containers, no cloud APIs. It's a standalone lab environment designed for deep DevOps learning and operational clarity.
 
-Through minimal, testable shell modules, this simulation teaches:
+Whether you're a DevOps engineer, SRE, cloud architect, or systems tinkerer, this training module helps you **understand how cloud-native primitives work — by rebuilding them from the ground up**.
 
-* File-based orchestration with `bash` and `make`
-* Real-time event triggers using `inotify`
-* Object storage logic (S3) via filesystem and archiving
-* Stateless compute (Lambda) via modular shell functions
-* Key-value storage (DynamoDB) with SQLite
-* Queue-based messaging (SQS) with a local DB
-* Fan-out messaging with SNS
-* Logging, versioning, and operational traceability
+It’s AWS... without AWS.
 
 ---
 
-## Simulated AWS Services
+## 🎯 Project Goals
 
-| AWS Service         | Simulated Behavior                   | Tools Used                            |
-| ------------------- | ------------------------------------ | ------------------------------------- |
-| **Amazon S3**       | File storage, versioning, sync       | `cp`, `rsync`, `sha256sum`            |
-| **AWS Lambda**      | Triggered execution on file event    | `inotifywait`, `bash`                 |
-| **Amazon DynamoDB** | Lightweight key-value storage        | `sqlite3`, `bash`, JSON               |
-| **Amazon SQS**      | Message queue (send/receive model)   | `sqlite3`, `bash`, `stdin/stdout`     |
-| **Amazon SNS**      | Fan-out notifications to subscribers | `bash`, file-based subscription model |
+The primary goal is to simulate key AWS services using **only fundamental Unix/Linux tools**, enabling engineers to:
 
----
+* Build infrastructure logic from first principles
+* Learn the internal behavior of event-driven systems
+* Develop cloud-native workflows without vendor lock-in
+* Master shell scripting, automation, and system orchestration
 
-![terminal](https://github.com/mikeninerbravog/cloudless-aws-simulation/blob/master/_resources/Peek%202025-07-12%2010-36.gif)
+This is a **bare metal DevOps dojo**. Every module is transparent, traceable, and inspectable.
 
 ---
 
-## Project Layout
+## 💡 What You'll Learn
+
+* ⚙️ **Automation** with `make` and shell modules
+* 📦 **S3-like object storage** via filesystem + archiving
+* 🧠 **Lambda-like stateless compute** using Bash functions
+* 🗂️ **DynamoDB-style key-value store** via SQLite
+* 📬 **SQS-style queuing system** for async workflows
+* 📣 **SNS-style fan-out messaging** to subscribers
+* 📑 **Audit logs & event tracing** via timestamped logs
+* 🧪 **Inotify-based triggers** for zero-polling workflows
+
+All modules can be extended, replaced, or scaled horizontally — the system is modular by design.
+
+---
+
+## 🧪 Simulated AWS Services
+
+| AWS Service  | Simulated Feature                      | Tooling Used                     |
+| ------------ | -------------------------------------- | -------------------------------- |
+| **S3**       | File drop, archiving, versioning       | `cp`, `rsync`, `sha256sum`       |
+| **Lambda**   | File-triggered stateless computation   | `inotifywait`, `bash`            |
+| **DynamoDB** | Key-value and structured event storage | `sqlite3`, `bash`, JSON          |
+| **SQS**      | Queued messaging (send + receive)      | `sqlite3`, `bash`                |
+| **SNS**      | Pub/Sub system with fan-out delivery   | `bash`, file-based subscriptions |
+
+---
+
+## 🧱 System Architecture
 
 ```
 cloudless-aws-simulation/
-├── input/              # Monitored directory (S3 simulation)
-├── archive/            # Versioned storage after sync
-├── logs/               # Lambda and SNS logs
-├── sns/                # SNS module (publish/register/topics/subscribers)
-├── db.sqlite           # SQLite store (DynamoDB + SQS)
-├── lambda.sh           # Stateless compute unit
-├── watcher.sh          # File monitor and trigger
-├── s3sync.sh           # Archive and move processed files
-├── sqs-send.sh         # Simulated message enqueue
-├── sqs-receive.sh      # Simulated message dequeue
-├── Makefile            # DevOps orchestration CLI
-└── README.md           # You're here
+├── input/              # Simulated S3 drop zone (watched dir)
+├── archive/            # Archived files with versioning
+├── logs/               # Lambda, SNS, and event logs
+├── sns/                # SNS modules + subscribers
+├── db.sqlite           # SQLite database for KV and queues
+├── lambda.sh           # Stateless compute logic
+├── watcher.sh          # Real-time file watcher
+├── s3sync.sh           # File versioning + archiving
+├── sqs-send.sh         # Message enqueue logic
+├── sqs-receive.sh      # Message dequeue handler
+├── Makefile            # CLI orchestration interface
+└── README.md           # Documentation (you are here)
 ```
 
 ---
 
-## Module Status
+## ✅ Module Status
 
-| Module            | Description                             | Status |
+| Module            | Role                                    | Status |
 | ----------------- | --------------------------------------- | ------ |
-| `input/`          | S3-style upload drop zone               | ✅      |
-| `lambda.sh`       | Stateless file processor                | ✅      |
-| `watcher.sh`      | Real-time trigger via inotify           | ✅      |
-| `s3sync.sh`       | Archive and version files               | ✅      |
-| `db.sqlite`       | Key-value store (Dynamo-style)          | ✅      |
-| `sqs-send.sh`     | Message enqueue (SQS simulation)        | ✅      |
-| `sqs-receive.sh`  | Message dequeue and consume             | ✅      |
-| `sns-publish.sh`  | Fan-out notification to subscribers     | ✅      |
-| `sns-register.sh` | Manual subscriber registration          | ✅      |
-| `subscribers/`    | Real-time log + simulated notifications | ✅      |
-| `Makefile`        | Full orchestration and automation       | ✅      |
-| `README.md`       | Documentation with usage and diagrams   | ✅      |
-| `iam-auth.sh`     | Role-based access control (IAM)         | ⏳      |
-| `gateway.sh`      | HTTP upload endpoint (API Gateway)      | ⏳      |
-| `step.sh`         | Workflow chaining / Step Functions      | ⏳      |
+| `input/`          | S3-style file drop zone                 | ✅      |
+| `lambda.sh`       | Stateless processor (Bash Lambda)       | ✅      |
+| `watcher.sh`      | Event detector via `inotify`            | ✅      |
+| `s3sync.sh`       | Archive & versioning logic              | ✅      |
+| `db.sqlite`       | SQLite store for events and queues      | ✅      |
+| `sqs-send.sh`     | Enqueue message to local SQS queue      | ✅      |
+| `sqs-receive.sh`  | Dequeue and process messages            | ✅      |
+| `sns-publish.sh`  | Publish event to topic subscribers      | ✅      |
+| `sns-register.sh` | Register shell subscribers              | ✅      |
+| `subscribers/`    | Example subscribers for fan-out         | ✅      |
+| `Makefile`        | CLI for automation                      | ✅      |
+| `iam-auth.sh`     | IAM role simulation (RBAC / ACL)        | ⏳      |
+| `gateway.sh`      | File upload via HTTP (API Gateway-like) | ⏳      |
+| `step.sh`         | Step Functions (workflow state machine) | ⏳      |
 
 ---
 
-## Requirements
+## 🧰 System Requirements
 
-Install these system tools (Debian-based distros):
+Install on any Debian-based Linux system:
 
 ```bash
 sudo apt update
 sudo apt install -y bash sqlite3 coreutils inotify-tools
 ```
 
-> `inotifywait` acts as a sentinel. It listens for filesystem changes and reacts instantly — no polling, no wasted CPU, no external agents.
+> `inotifywait` is a file event sentinel — instant event-driven reactions without polling.
 
 ---
 
-## Workflow Overview
+## 🚀 How It Works
 
-1. A file is placed in `input/` (via `scp`, `curl`, etc)
-2. `watcher.sh` detects it using `inotifywait`
-3. `lambda.sh` is triggered:
+1. Place a file in `input/` (e.g., PDF, CSV, JSON)
+2. `watcher.sh` detects the new file
+3. `lambda.sh` is triggered automatically:
 
-   * Computes SHA256
-   * Logs to `logs/`
+   * Computes SHA256 hash
+   * Logs the operation
+   * Archives the file
    * Inserts metadata into `db.sqlite`
-   * Publishes a fan-out message via SNS
-   * Executes subscribers (e.g. logs, notifications)
-   * Syncs file to `archive/` using `s3sync.sh`
+   * Publishes to `sns` topic (`s3new`)
+4. All SNS subscribers are executed (e.g., notify, log)
+5. Logs, archive, and DB entries are created in real time
+
+Everything happens **automatically** after a single `make run`.
 
 ---
 
-## Usage
+## 🏁 Quick Start
 
-This system runs in **fully automated mode**. After the initial `make run`, any file placed in the `input/` directory triggers the entire pipeline — **no further user interaction required**.
-
----
-
-### Step-by-step Execution
-
-#### 1. Start the system
+### 1. Start the system
 
 ```bash
 make run
 ```
 
-This will:
+This:
 
-* Reset SNS state (`sns-reset`)
-* Register all SNS subscribers (`sns-integrate`)
-* Launch the file watcher (`watcher.sh`)
-* Monitor `input/` in real time
-
-Leave this terminal open — it acts as your **live event monitor**.
+* Launches the file watcher
+* Registers SNS subscribers
+* Begins live monitoring of `input/`
 
 ---
 
-#### 2. In another terminal, simulate file upload
+### 2. Upload a file (from another terminal)
 
 ```bash
-cp path/to/any/file.pdf input/myfile.pdf
+cp myfile.pdf input/myfile.pdf
 ```
 
-This mimics an S3-style upload. It triggers the full event-driven pipeline:
+That’s it. The pipeline begins:
 
-* `lambda.sh` processes the file:
-
-  * Computes SHA256
-  * Logs to `logs/`
-  * Stores metadata in `db.sqlite`
-  * Publishes a message to the `s3new` SNS topic
-* `sns-publish.sh` executes all subscribers:
-
-  * `log-to-file.sh` logs the event
-  * `notify-demo.sh` simulates a fan-out (e.g. SMS, webhook, email)
-* `s3sync.sh` archives the file into `archive/` using its hash
-
-All outputs are logged **and also printed to the terminal** in verbose mode.
+* `lambda.sh` → process
+* `sns-publish.sh` → notify
+* `s3sync.sh` → archive
 
 ---
 
-#### 3. Observe the results
-
-* **Lambda log:** `logs/myfile.pdf.log`
-* **SNS log:** `logs/sns.log`
-* **Demo fan-out log:** `logs/sns-demo.log`
-* **Archived file:** `archive/<hash>_myfile.pdf`
-* **Database check:**
-
-  ```bash
-  sqlite3 db.sqlite "SELECT * FROM events;"
-  ```
-
----
-
-### Reset or Clean
-
-* Reset logs and database (keeps archive):
-
-  ```bash
-  make reset
-  ```
-
-* Wipe everything (full clean):
-
-  ```bash
-  make clean
-  ```
-
----
-
-#### 2. Open Terminal #1 — start the watcher
+### 3. Inspect results
 
 ```bash
-make run
-```
+# Logs
+cat logs/myfile.pdf.log
+cat logs/sns.log
+cat logs/sns-demo.log
 
-This keeps `watcher.sh` running in the foreground, monitoring `input/` for file events.
+# Archive
+ls archive/
 
----
-
-#### 3. Open Terminal #2 — simulate file upload
-
-```bash
-cp path/to/any/file.pdf input/test-demo.pdf
-```
-
-Triggers the pipeline:
-
-* `lambda.sh` → process + log + DB
-* `sns-publish.sh` → fan-out
-* `s3sync.sh` → archive file
-
----
-
-#### 4. Observe results
-
-* **Logs:**
-
-  * `logs/test-demo.pdf.log` → Lambda trace
-  * `logs/sns.log` → Basic SNS log
-  * `logs/sns-demo.log` → Simulated fan-out (email, SMS, webhook)
-
-* **Archive:**
-
-  * `archive/<hash>_test-demo.pdf`
-
-* **Database:**
-
-  ```bash
-  sqlite3 db.sqlite "SELECT * FROM events;"
-  ```
-
----
-
-### Reset & Clean
-
-```bash
-make reset     # Clear logs and DB entries
-make clean     # Wipe all data, logs, archives, and DB (DANGER)
+# Database
+sqlite3 db.sqlite "SELECT * FROM events;"
 ```
 
 ---
 
-## Real-World Use Cases
+## 🧼 Maintenance
 
-| Problem                           | Simulated Solution                        |
-| --------------------------------- | ----------------------------------------- |
-| Process incoming client documents | File drop → trigger → log + index         |
-| Act on sensor or ETL file drops   | Event-driven via inotify                  |
-| Immutable audit logging           | SHA256 + timestamp + log + archive        |
-| Archiving + version control       | `archive/` naming with content hash       |
-| Asynchronous event pipeline       | SQLite queue + consumer script            |
-| Offline-ready DevOps system       | Runs on any VPS, no external dependencies |
+| Task                             | Command      |
+| -------------------------------- | ------------ |
+| Reset logs and DB (keep archive) | `make reset` |
+| Wipe everything (dangerous)      | `make clean` |
 
 ---
 
-## Mermaid Diagram
+## 📊 Real-World Use Cases
+
+| Problem                        | Simulated Solution                      |
+| ------------------------------ | --------------------------------------- |
+| Document intake pipelines      | File drop + event trigger + logging     |
+| ETL workflow bootstrapping     | Inotify + fan-out processing            |
+| Immutable logs with versioning | SHA256 archive with timestamps          |
+| Message-driven pipelines       | SQS + Lambda + SNS                      |
+| Audit-compliant workflows      | Full traceability and offline readiness |
+
+---
+
+## 🔄 Flowchart
 
 ```mermaid
 flowchart TD
-  subgraph S3["input/ (Simulated S3 Bucket)"]
-    FileUpload["New File"]
+  subgraph S3["input/ (S3 Sim)"]
+    FileUpload["📥 File Drop"]
   end
 
   subgraph Watcher["watcher.sh"]
-    DetectFile["Detect file event"]
-    TriggerLambda["Trigger lambda.sh"]
+    Watch["👀 Detect Change"]
+    Trigger["⚡ Trigger lambda.sh"]
   end
 
   subgraph Lambda["lambda.sh"]
-    ProcessFile["Process file"]
-    LogToDisk["Write logs/"]
-    StoreInDB["Insert into db.sqlite"]
-    PublishSNS["Publish SNS message"]
-    TriggerSync["Run s3sync.sh"]
+    Hash["🔐 Compute Hash"]
+    Log["📝 Log to logs/"]
+    DB["🧠 Store in SQLite"]
+    SNS["📣 Publish to SNS"]
+    Archive["📦 Archive File"]
   end
 
   subgraph SNS["sns-publish.sh"]
-    Fanout["Execute all subscribers"]
+    Fanout["🔀 Notify Subscribers"]
   end
 
-  subgraph Subscribers["sns/subscribers/*.sh"]
-    LogSubscriber["log-to-file.sh"]
-    DemoNotify["notify-demo.sh"]
+  subgraph Subscribers["sns/subscribers/"]
+    Logger["📑 log-to-file.sh"]
+    Notifier["📬 notify-demo.sh"]
   end
 
-  subgraph Archive["archive/"]
-    StoreCopy["Store hashed copy"]
-  end
-
-  FileUpload --> DetectFile --> TriggerLambda
-  TriggerLambda --> ProcessFile --> LogToDisk & StoreInDB & PublishSNS & TriggerSync
-  PublishSNS --> Fanout --> LogSubscriber & DemoNotify
-  TriggerSync --> StoreCopy
-
+  FileUpload --> Watch --> Trigger --> Hash
+  Hash --> Log & DB & SNS & Archive
+  SNS --> Fanout --> Logger & Notifier
 ```
 
 ---
 
-## Training Goals
+## 🧭 Training Outcomes
 
-* Understand core cloud primitives via local simulation
-* Build event-based pipelines using only Bash
-* Implement Lambda-style stateless processing
-* Use SQLite for structured key-value storage (Dynamo-style)
-* Fan-out messages with SNS logic
-* Package infrastructure using `make` targets
+After completing this simulation, you’ll be able to:
 
----
-
-## No External Dependencies
-
-No SDKs, no AWS CLI, no Docker, no API keys.
-Runs entirely from a self-hosted Linux box.
-Perfect for air-gapped environments, cost-free labs, or DevSecOps drills.
+* Rebuild essential cloud primitives locally
+* Automate infrastructure logic with Bash and Make
+* Implement zero-polling event pipelines
+* Understand pub/sub and queue-driven architecture
+* Log, store, and archive operations with full traceability
+* Design air-gapped, vendor-free infrastructure for secure ops
 
 ---
 
-## Future Modules
+## 🔐 No Vendor Lock-In
 
-| Feature        | Purpose                | Module        |
-| -------------- | ---------------------- | ------------- |
-| SNS     | Fan-out pub/sub        | `sns/*.sh`    |
-| IAM            | Access control         | `iam-auth.sh` |
-| API Gateway    | File upload via HTTP   | `gateway.sh`  |
-| Step Functions | State machine chaining | `step.sh`     |
-
----
-## Scalability
-
-This project is designed for simplicity and local execution, but it can scale far beyond proof-of-concept level — without relying on AWS or any external cloud provider.
-
-The architecture supports horizontal scale-out using multiple `watcher.sh` instances across partitioned input directories, and task parallelism can be achieved by introducing lightweight worker queues. SQLite may be replaced with PostgreSQL or Redis for better concurrency, while logging and archiving can be rotated or compressed for long-term retention.
-
-Subscribers in the SNS model can be extended to run across multiple nodes, with inter-process communication over the local network using tools like `socat` or `netcat`. Processing can be batched, offloaded, or distributed depending on volume — all under your control.
-
-With minimal adjustments, this system can support tens of thousands of events per hour — on commodity hardware — at a fraction of the cost of cloud services. You own the stack, the flow, and the runtime.
-
-This is DevOps without a leash.
+* ❌ No AWS CLI
+* ❌ No Docker
+* ❌ No external APIs
+* ✅ 100% Offline
+* ✅ 100% Linux-native
+* ✅ 100% Yours
 
 ---
 
-This system avoids the complexity and hidden costs of real cloud stacks.
-**Everything runs on metal — with clarity, control, and zero billing surprises.**
+## 🔭 What's Next?
+
+| Feature            | Description                    | Module        |
+| ------------------ | ------------------------------ | ------------- |
+| **IAM**            | Simulated access control       | `iam-auth.sh` |
+| **API Gateway**    | HTTP endpoint to upload files  | `gateway.sh`  |
+| **Step Functions** | Visual workflow chaining       | `step.sh`     |
+| **Metrics**        | Runtime stats + Grafana export | TBD           |
 
 ---
 
-**You're not mimicking the cloud. You're reclaiming your stack.**
-*Built under pressure, in steel, for the field.*
+## ⚙️ Scalability & Extensibility
 
-## By **Mike Niner Bravog**
- 
+This lab starts simple — but scales with your ambition.
+
+* Add worker nodes with `socat`/`netcat` or UNIX sockets
+* Replace SQLite with PostgreSQL or Redis for concurrency
+* Add queues, shards, or workers for high-throughput ingestion
+* Integrate Prometheus or custom metrics for observability
+* Store archive files remotely with `rclone`, `rsync`, or `sftp`
+
+You control the limits. You own the stack.
+
+---
+
+## 🔥 Why This Matters
+
+Cloud vendors abstract away complexity — but that also hides power.
+
+This simulation helps you:
+
+* **Learn how cloud primitives are designed**
+* **Avoid dependency on opaque systems**
+* **Build muscle-memory for resilient DevOps**
+
+Perfect for:
+
+* ✅ Air-gapped infrastructure
+* ✅ Incident response & disaster recovery drills
+* ✅ Low-cost experimentation and upskilling
+* ✅ Embedded systems and offline edge devices
+* ✅ Real-world Linux training bootcamps
+
+---
+
+## 👨‍🏫 About the Author
+
+**Mike Niner Bravog**
+Veteran sysadmin turned DevOps sensei.
+Builder of tools, breaker of myths.
+Teaching infrastructure clarity — one shell script at a time.
+
+---
+
+## 📎 License
+
+This project is licensed under the [MIT License](./LICENSE).
+
+---
+
+### ⚔️ You’re not just simulating AWS — you’re **reclaiming the cloud**.
