@@ -1,7 +1,9 @@
 # 🛠️ Cloudless AWS Simulation
 
 **Bare Metal DevOps Training Lab**
+
 **Codename:** `cloudless-aws-simulation`
+
 **Author & Instructor:** *Mike Niner Bravog*
 
 > “You're not mimicking the cloud. You're reclaiming your stack.”
@@ -308,8 +310,10 @@ Perfect for:
 ## 👨‍🏫 About the Author
 
 **Mike Niner Bravog**
-Veteran sysadmin turned DevOps sensei.
+Veteran sysadmin turned DevOps practitioner.
+
 Builder of tools, breaker of myths.
+
 Teaching infrastructure clarity — one shell script at a time.
 
 ---
