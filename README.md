@@ -310,7 +310,8 @@ Perfect for:
 ## 👨‍🏫 About the Author
 
 **Mike Niner Bravog**
-Veteran sysadmin turned DevOps practitioner.
+
+Programmer | SysAdmin | DevOps | AI Engineer
 
 Builder of tools, breaker of myths.
 
@@ -320,7 +321,7 @@ Teaching infrastructure clarity — one shell script at a time.
 
 ## 📎 License
 
-This project is licensed under the [MIT License](./LICENSE).
+This project is licensed under the MIT License.
 
 ---
 
