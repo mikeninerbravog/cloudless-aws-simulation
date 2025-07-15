@@ -1,4 +1,4 @@
-# 🛠️ Cloudless AWS Simulation
+# Cloudless AWS Simulation
 
 **Bare Metal DevOps Training Lab**
 
@@ -11,7 +11,7 @@
 
 ---
 
-## 🔍 Overview
+## Overview
 
 This project is a **cloudless simulation of AWS core services**, handcrafted entirely with Bash, SQLite, and native Linux tools — no SDKs, no containers, no cloud APIs. It's a standalone lab environment designed for deep DevOps learning and operational clarity.
 
@@ -21,7 +21,7 @@ It’s AWS... without AWS.
 
 ---
 
-## 🎯 Project Goals
+## Project Goals
 
 The primary goal is to simulate key AWS services using **only fundamental Unix/Linux tools**, enabling engineers to:
 
@@ -34,22 +34,22 @@ This is a **bare metal DevOps dojo**. Every module is transparent, traceable, an
 
 ---
 
-## 💡 What You'll Learn
+## What You'll Learn
 
-* ⚙️ **Automation** with `make` and shell modules
-* 📦 **S3-like object storage** via filesystem + archiving
-* 🧠 **Lambda-like stateless compute** using Bash functions
-* 🗂️ **DynamoDB-style key-value store** via SQLite
-* 📬 **SQS-style queuing system** for async workflows
-* 📣 **SNS-style fan-out messaging** to subscribers
-* 📑 **Audit logs & event tracing** via timestamped logs
-* 🧪 **Inotify-based triggers** for zero-polling workflows
+* **Automation** with `make` and shell modules
+* **S3-like object storage** via filesystem + archiving
+* **Lambda-like stateless compute** using Bash functions
+* **DynamoDB-style key-value store** via SQLite
+* **SQS-style queuing system** for async workflows
+* **SNS-style fan-out messaging** to subscribers
+* **Audit logs & event tracing** via timestamped logs
+* **Inotify-based triggers** for zero-polling workflows
 
 All modules can be extended, replaced, or scaled horizontally — the system is modular by design.
 
 ---
 
-## 🧪 Simulated AWS Services
+## Simulated AWS Services
 
 | AWS Service  | Simulated Feature                      | Tooling Used                     |
 | ------------ | -------------------------------------- | -------------------------------- |
@@ -61,7 +61,7 @@ All modules can be extended, replaced, or scaled horizontally — the system is 
 
 ---
 
-## 🧱 System Architecture
+## System Architecture
 
 ```
 cloudless-aws-simulation/
@@ -81,7 +81,7 @@ cloudless-aws-simulation/
 
 ---
 
-## ✅ Module Status
+## Module Status
 
 | Module            | Role                                    | Status |
 | ----------------- | --------------------------------------- | ------ |
@@ -102,7 +102,7 @@ cloudless-aws-simulation/
 
 ---
 
-## 🧰 System Requirements
+## System Requirements
 
 Install on any Debian-based Linux system:
 
@@ -115,7 +115,7 @@ sudo apt install -y bash sqlite3 coreutils inotify-tools
 
 ---
 
-## 🚀 How It Works
+## How It Works
 
 1. Place a file in `input/` (e.g., PDF, CSV, JSON)
 2. `watcher.sh` detects the new file
@@ -133,7 +133,7 @@ Everything happens **automatically** after a single `make run`.
 
 ---
 
-## 🏁 Quick Start
+## Quick Start
 
 ### 1. Start the system
 
@@ -180,7 +180,7 @@ sqlite3 db.sqlite "SELECT * FROM events;"
 
 ---
 
-## 🧼 Maintenance
+## Maintenance
 
 | Task                             | Command      |
 | -------------------------------- | ------------ |
@@ -189,7 +189,7 @@ sqlite3 db.sqlite "SELECT * FROM events;"
 
 ---
 
-## 📊 Real-World Use Cases
+## Real-World Use Cases
 
 | Problem                        | Simulated Solution                      |
 | ------------------------------ | --------------------------------------- |
@@ -201,7 +201,7 @@ sqlite3 db.sqlite "SELECT * FROM events;"
 
 ---
 
-## 🔄 Flowchart
+## Flowchart
 
 ```mermaid
 flowchart TD
@@ -238,7 +238,7 @@ flowchart TD
 
 ---
 
-## 🧭 Training Outcomes
+## Training Outcomes
 
 After completing this simulation, you’ll be able to:
 
@@ -251,7 +251,7 @@ After completing this simulation, you’ll be able to:
 
 ---
 
-## 🔐 No Vendor Lock-In
+## No Vendor Lock-In
 
 * ❌ No AWS CLI
 * ❌ No Docker
@@ -262,7 +262,7 @@ After completing this simulation, you’ll be able to:
 
 ---
 
-## 🔭 What's Next?
+## What's Next?
 
 | Feature            | Description                    | Module        |
 | ------------------ | ------------------------------ | ------------- |
@@ -273,7 +273,7 @@ After completing this simulation, you’ll be able to:
 
 ---
 
-## ⚙️ Scalability & Extensibility
+## ⚙Scalability & Extensibility
 
 This lab starts simple — but scales with your ambition.
 
@@ -287,7 +287,7 @@ You control the limits. You own the stack.
 
 ---
 
-## 🔥 Why This Matters
+## Why This Matters
 
 Cloud vendors abstract away complexity — but that also hides power.
 
@@ -307,7 +307,7 @@ Perfect for:
 
 ---
 
-## 👨‍🏫 About the Author
+## About the Founder of this Repository
 
 **Mike Niner Bravog**
 
@@ -319,7 +319,7 @@ Teaching infrastructure clarity — one shell script at a time.
 
 ---
 
-## 📎 License
+## License
 
 This project is licensed under the MIT License.
 
